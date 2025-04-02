@@ -1,0 +1,370 @@
+  - name: modbus_WP-Pool
+    type: tcp
+    host: IP_WP
+    port: 8899
+    sensors:
+    ################ WP Zähler SDM120m ################
+      - name: "WP-Pool_W"
+        unit_of_measurement: W
+        slave: 2
+        address: 12
+        input_type: input
+       #precision: 3
+        scan_interval: 10
+        device_class: Power
+        state_class: measurement
+        data_type: float32
+      - name: "WP-Pool_Wh"
+        unit_of_measurement: Wh
+        slave: 2
+        address: 72
+        input_type: input
+        #precision: 4
+        scan_interval: 10
+        device_class: energy
+        state_class: total_increasing
+        data_type: float32
+
+    ################ WP IXCR66 ################    
+      - name: IXCR66_Mode
+        unique_id: IXCR66_HR_0
+        slave: 1
+        address: 0
+        input_type: holding
+        data_type: int16
+      - name: IXCR66_Silence
+        unique_id: IXCR66_HR_1
+        slave: 1
+        address: 1
+        input_type: input
+        data_type: int16
+      - name: IXCR66_Set_temp
+        unique_id: IXCR66_HR_3
+        slave: 1
+        address: 3
+        input_type: holding
+        data_type: int16
+        offset: -30
+        scale: 0.5
+        device_class: temperature
+        unit_of_measurement: °C
+      - name: IXCR66_Speed
+        unique_id: IXCR66_IR_0
+        slave: 1
+        address: 0
+        input_type: input
+        data_type: int16
+      - name: IXCR66_Water_inlet_temp
+        unique_id: IXCR66_IR_3
+        slave: 1
+        address: 3
+        input_type: input
+        data_type: int16
+        precision: 1
+        offset: -30
+        scale: 0.5
+        device_class: temperature
+        unit_of_measurement: °C
+      - name: IXCR66_Water_outlet_temp
+        unique_id: IXCR66_IR_4
+        slave: 1
+        address: 4
+        input_type: input
+        data_type: int16
+        precision: 1
+        offset: -30
+        scale: 0.5
+        device_class: temperature
+        unit_of_measurement: °C
+      - name: IXCR66_Outside_temp
+        unique_id: IXCR66_IR_5
+        slave: 1
+        address: 5
+        input_type: input
+        data_type: int16
+        precision: 1
+        offset: -30
+        scale: 0.5
+        device_class: temperature
+        unit_of_measurement: °C
+      - name: IXCR66_min_Set_temp
+        unique_id: IXCR66_IR_17
+        slave: 1
+        address: 17
+        input_type: input
+        data_type: int16
+        precision: 0
+        offset: -30
+        scale: 0.5
+        device_class: temperature
+        unit_of_measurement: °C
+      - name: IXCR66_max_Set_temp
+        unique_id: IXCR66_IR_18
+        slave: 1
+        address: 18
+        input_type: input
+        data_type: int16
+        precision: 0
+        offset: -30
+        scale: 0.5
+        device_class: temperature
+        unit_of_measurement: °C
+        
+    climates:
+      - name: "IXCR66"
+        slave: 1
+        address: 3
+        input_type: input
+        data_type: int16
+        max_temp: 40
+        min_temp: 18
+        offset: -30
+        precision: 1
+        scale: 0.5
+        target_temp_register: 3
+        temp_step: 1
+        temperature_unit: C
+        hvac_mode_register:
+          address: 1
+          write_registers: false
+          values:
+            state_auto: 1
+            state_heat: 0
+        hvac_onoff_register: 0
+        write_registers: false
+          
+    switches:
+      - name: IXCR66_Power
+        unique_id: IXCR66_Power
+        slave: 1
+        address: 0
+        command_on: 1
+        command_off: 0
+        write_type: coil
+        verify:
+            input_type: coil
+            address: 0
+            delay: 1
+            state_on: 1
+            state_off: 0
+    binary_sensors:
+      - name: IXCR66_On_Off
+        unique_id: IXCR66_DI_0
+        slave: 1
+        address: 0
+        input_type: discrete_input
+      - name: IXCR66_Defrosting
+        unique_id: IXCR66_DI_1
+        slave: 1
+        address: 1
+        input_type: discrete_input
+      - name: IXCR66_Error_E0
+        unique_id: IXCR66_DI_48
+        slave: 1
+        address: 48
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_E1
+        unique_id: IXCR66_DI_49
+        slave: 1
+        address: 49
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_E2
+        unique_id: IXCR66_DI_50
+        slave: 1
+        address: 50
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_E3
+        unique_id: IXCR66_DI_51
+        slave: 1
+        address: 51
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_E4
+        unique_id: IXCR66_DI_52
+        slave: 1
+        address: 52
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_E5
+        unique_id: IXCR66_DI_53
+        slave: 1
+        address: 53
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_E6
+        unique_id: IXCR66_DI_54
+        slave: 1
+        address: 54
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_E7
+        unique_id: IXCR66_DI_55
+        slave: 1
+        address: 55
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_E8
+        unique_id: IXCR66_DI_56
+        slave: 1
+        address: 56
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_E9
+        unique_id: IXCR66_DI_57
+        slave: 1
+        address: 57
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_EA
+        unique_id: IXCR66_DI_58
+        slave: 1
+        address: 58
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_EB
+        unique_id: IXCR66_DI_59
+        slave: 1
+        address: 59
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_ED
+        unique_id: IXCR66_DI_61
+        slave: 1
+        address: 61
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_P0
+        unique_id: IXCR66_DI_64
+        slave: 1
+        address: 64
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_P1
+        unique_id: IXCR66_DI_65
+        slave: 1
+        address: 65
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_P2
+        unique_id: IXCR66_DI_66
+        slave: 1
+        address: 66
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_P3
+        unique_id: IXCR66_DI_67
+        slave: 1
+        address: 67
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_P4
+        unique_id: IXCR66_DI_68
+        slave: 1
+        address: 68
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_P5
+        unique_id: IXCR66_DI_69
+        slave: 1
+        address: 69
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_P6
+        unique_id: IXCR66_DI_70
+        slave: 1
+        address: 70
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_P7
+        unique_id: IXCR66_DI_71
+        slave: 1
+        address: 71
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_P8
+        unique_id: IXCR66_DI_72
+        slave: 1
+        address: 72
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_P9
+        unique_id: IXCR66_DI_73
+        slave: 1
+        address: 73
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_PA
+        unique_id: IXCR66_DI_74
+        slave: 1
+        address: 74
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_F0
+        unique_id: IXCR66_DI_80
+        slave: 1
+        address: 80
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_F1
+        unique_id: IXCR66_DI_81
+        slave: 1
+        address: 81
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_F2
+        unique_id: IXCR66_DI_82
+        slave: 1
+        address: 82
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_F3
+        unique_id: IXCR66_DI_83
+        slave: 1
+        address: 83
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_F4
+        unique_id: IXCR66_DI_84
+        slave: 1
+        address: 84
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_F5
+        unique_id: IXCR66_DI_85
+        slave: 1
+        address: 85
+        input_type: discrete_input
+        device_class: problem        
+      - name: IXCR66_Error_F6
+        unique_id: IXCR66_DI_86
+        slave: 1
+        address: 86
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_F7
+        unique_id: IXCR66_DI_87
+        slave: 1
+        address: 87
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_F8
+        unique_id: IXCR66_DI_88
+        slave: 1
+        address: 88
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_F9
+        unique_id: IXCR66_DI_89
+        slave: 1
+        address: 89
+        input_type: discrete_input
+        device_class: problem
+      - name: IXCR66_Error_FB
+        unique_id: IXCR66_DI_91
+        slave: 1
+        address: 91
+        input_type: discrete_input
+        device_class: problem
